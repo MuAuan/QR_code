@@ -25,7 +25,7 @@ from pyzbar.pyzbar import decode
 from pyzbar.pyzbar import ZBarSymbol
 
 def edit_contrast(image, gamma):
-    """コントラクト調整"""
+    """コントラスト調整"""
     look_up_table = [np.uint8(255.0 / (1 + np.exp(-gamma * (i - 128.) / 255.)))
         for i in range(256)]
 
@@ -38,7 +38,7 @@ def noise_get(ret,frame):
     while True:
         if ret == False:
             continue
-        # グレースケール化してコントラクトを調整する
+        # グレースケール化してコントラストを調整する
         gray_scale = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         image = edit_contrast(gray_scale, 5)
 
