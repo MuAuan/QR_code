@@ -21,17 +21,8 @@ from keras.layers import Input
 from keras.layers.core import Dropout
 from keras.models import Model
 import qrcode
-from PIL import Image
 from pyzbar.pyzbar import decode
 from pyzbar.pyzbar import ZBarSymbol
-import cv2
-import numpy as np
-from pyzbar.pyzbar import decode
-from pyzbar.pyzbar import ZBarSymbol
-import cv2
-import numpy as np
-import qrcode
-from PIL import Image
 
 def edit_contrast(image, gamma):
     """コントラクト調整"""
@@ -86,8 +77,8 @@ def generate(BATCH_SIZE=1,num0=[1,0]):
     g.compile(loss='binary_crossentropy', optimizer=Adam(lr=0.0002, beta_1=0.5))
     g.load_weights('./gen_images/generator_22000.h5')
     noise = np.random.uniform(size=[BATCH_SIZE, 2], low=-1.0, high=1.0) ##32*32
-    x=np.float(num0[0:2])
-    y=np.float(num0[3:8])
+    x=np.float(num0[0:3])
+    y=np.float(num0[5:9])
     print(x,y)
     noise[0]=[x,y]  #[-1,0.5]
     generated_images = g.predict(noise)
@@ -115,11 +106,11 @@ if __name__ == "__main__":
         img = Image.open('./gen_images/generated_images.png').resize(frame.size)
         mask = Image.new("L", frame.size, 1)
         im = Image.composite(frame, img, mask)
-        im.save('./gen_images/qr_1.png')
+        im.save('./gen_images/qr_'+str(num0)+'.png')
         imgArray = np.asarray(im)
         
         font = cv2.FONT_HERSHEY_SIMPLEX
-        cv2.putText(imgArray,str(num0),(10,300), font, 2,(255,255,255),2,cv2.LINE_AA)
+        cv2.putText(imgArray,str(num0),(100,200), font, 2,(255,255,255),2,cv2.LINE_AA)
         cv2.imshow('frame',imgArray)
         if cv2.waitKey(1) >= 0:
             break
